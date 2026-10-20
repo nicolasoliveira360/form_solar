@@ -1,0 +1,13 @@
+# Segredos locais (token da Meta etc.) — nunca versionar
+.dev.vars
+.env
+.env.*
+
+# Cloudflare / Node
+.wrangler/
+node_modules/
+
+# Arquivos compactados e lixo do sistema
+*.zip
+.DS_Store
+Thumbs.db

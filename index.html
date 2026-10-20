@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Integrador solar: agenda cheia de visitas que viram contrato</title>
+  <meta name="description" content="Orçamentos qualificados todo mês para integradores de energia solar. Exclusivo para integradores com CNPJ e +5 instalações/mês.">
+  <meta name="theme-color" content="#FFFFFF">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1874281433734075');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1874281433734075&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
+</head>
+<body>
+
+  <div class="progress" id="progress" role="progressbar" aria-label="Progresso do formulário" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+    <div class="progress__bar" id="progress-bar"></div>
+  </div>
+
+  <header class="container topbar">
+    <!-- Troque o arquivo assets/logo.png pela logo real. Enquanto ele não existir, o placeholder é exibido. -->
+    <img class="logo" src="assets/logo.png" alt="Agência HSP" height="40"
+         onerror="this.onerror=null;this.src='assets/logo-placeholder.svg';">
+  </header>
+
+  <main class="container" id="app">
+
+    <!-- CAPA -->
+    <section class="screen" data-step="0" aria-labelledby="cover-title">
+      <h1 class="cover__title" id="cover-title" tabindex="-1">☀️ Integrador solar: agenda cheia de visitas que viram contrato</h1>
+
+      <ul class="bullets">
+        <li>📅 Visitas técnicas toda semana</li>
+        <li>🎯 Anúncios só para donos de imóvel</li>
+        <li>🔎 Só leads com conta acima de R$300</li>
+        <li>🏆 Agência 100% focada em solar</li>
+      </ul>
+
+      <button type="button" class="btn" data-action="start">Quero minha agenda cheia</button>
+      <p class="cover__note">→ Exclusivo para integradores com CNPJ e +5 instalações/mês</p>
+    </section>
+
+    <!-- 1. NOME -->
+    <section class="screen" data-step="1" hidden aria-labelledby="q1">
+      <button type="button" class="back" data-action="back">← Voltar</button>
+      <form class="step-form" data-step="1" novalidate>
+        <p class="step-count">Pergunta 1 de 6</p>
+        <h2 class="question" id="q1" tabindex="-1">Qual seu nome?</h2>
+        <div class="field">
+          <label class="sr-only" for="nome">Nome</label>
+          <input id="nome" name="nome" type="text" autocomplete="name" placeholder="Seu nome" aria-describedby="err-nome">
+          <p class="error" id="err-nome" aria-live="polite"></p>
+        </div>
+        <button type="submit" class="btn">Continuar</button>
+      </form>
+    </section>
+
+    <!-- 2. WHATSAPP -->
+    <section class="screen" data-step="2" hidden aria-labelledby="q2">
+      <button type="button" class="back" data-action="back">← Voltar</button>
+      <form class="step-form" data-step="2" novalidate>
+        <p class="step-count">Pergunta 2 de 6</p>
+        <h2 class="question" id="q2" tabindex="-1">Qual seu WhatsApp e e-mail?</h2>
+        <div class="field">
+          <label for="whatsapp">WhatsApp</label>
+          <input id="whatsapp" name="whatsapp" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="(00) 00000-0000" maxlength="15" aria-describedby="err-whatsapp">
+          <p class="error" id="err-whatsapp" aria-live="polite"></p>
+        </div>
+        <div class="field">
+          <label for="email">E-mail</label>
+          <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="voce@empresa.com.br" aria-describedby="err-email">
+          <p class="error" id="err-email" aria-live="polite"></p>
+        </div>
+        <button type="submit" class="btn">Continuar</button>
+      </form>
+    </section>
+
+    <!-- 3. EMPRESA E CIDADE -->
+    <section class="screen" data-step="3" hidden aria-labelledby="q3">
+      <button type="button" class="back" data-action="back">← Voltar</button>
+      <form class="step-form" data-step="3" novalidate>
+        <p class="step-count">Pergunta 3 de 6</p>
+        <h2 class="question" id="q3" tabindex="-1">Qual o nome da sua empresa e cidade de atuação?</h2>
+        <div class="field">
+          <label for="empresa">Empresa</label>
+          <input id="empresa" name="empresa" type="text" autocomplete="organization" placeholder="Nome da empresa" aria-describedby="err-empresa">
+          <p class="error" id="err-empresa" aria-live="polite"></p>
+        </div>
+        <div class="field">
+          <label for="cidade">Cidade/UF</label>
+          <input id="cidade" name="cidade" type="text" autocomplete="address-level2" placeholder="Ex.: Campinas/SP" aria-describedby="err-cidade">
+          <p class="error" id="err-cidade" aria-live="polite"></p>
+        </div>
+        <button type="submit" class="btn">Continuar</button>
+      </form>
+    </section>
+
+    <!-- 4. INSTALAÇÕES -->
+    <section class="screen" data-step="4" hidden aria-labelledby="q4">
+      <button type="button" class="back" data-action="back">← Voltar</button>
+      <p class="step-count">Pergunta 4 de 6</p>
+      <h2 class="question" id="q4" tabindex="-1">Quantas instalações vocês fazem por mês?</h2>
+      <div class="options" role="group" aria-labelledby="q4">
+        <button type="button" class="option" data-field="instalacoes" data-value="Até 5">Até 5</button>
+        <button type="button" class="option" data-field="instalacoes" data-value="6 a 15">6 a 15</button>
+        <button type="button" class="option" data-field="instalacoes" data-value="16 a 30">16 a 30</button>
+        <button type="button" class="option" data-field="instalacoes" data-value="Mais de 30">Mais de 30</button>
+      </div>
+    </section>
+
+    <!-- 5. ORIGEM DOS CLIENTES -->
+    <section class="screen" data-step="5" hidden aria-labelledby="q5">
+      <button type="button" class="back" data-action="back">← Voltar</button>
+      <p class="step-count">Pergunta 5 de 6</p>
+      <h2 class="question" id="q5" tabindex="-1">Hoje, de onde vem a maioria dos seus clientes?</h2>
+      <div class="options" role="group" aria-labelledby="q5">
+        <button type="button" class="option" data-field="origem" data-value="Indicação">Indicação</button>
+        <button type="button" class="option" data-field="origem" data-value="Tráfego pago">Tráfego pago</button>
+        <button type="button" class="option" data-field="origem" data-value="Equipe de vendedores">Equipe de vendedores</button>
+        <button type="button" class="option" data-field="origem" data-value="Outro">Outro</button>
+      </div>
+    </section>
+
+    <!-- 6. INVESTIMENTO -->
+    <section class="screen" data-step="6" hidden aria-labelledby="q6">
+      <button type="button" class="back" data-action="back">← Voltar</button>
+      <p class="step-count">Pergunta 6 de 6</p>
+      <h2 class="question" id="q6" tabindex="-1">Quanto você pode investir por mês em marketing?</h2>
+      <div class="options" role="group" aria-labelledby="q6">
+        <button type="button" class="option" data-field="investimento" data-value="Até R$ 2.000">Até R$ 2.000</button>
+        <button type="button" class="option" data-field="investimento" data-value="R$ 2.000 a R$ 5.000">R$ 2.000 a R$ 5.000</button>
+        <button type="button" class="option" data-field="investimento" data-value="R$ 5.000 a R$ 10.000">R$ 5.000 a R$ 10.000</button>
+        <button type="button" class="option" data-field="investimento" data-value="Acima de R$ 10.000">Acima de R$ 10.000</button>
+      </div>
+      <p class="error error--submit" id="err-submit" aria-live="polite"></p>
+      <button type="button" class="btn" id="submit-btn" data-action="submit" disabled>
+        <span class="btn__label">Enviar</span>
+      </button>
+    </section>
+
+    <!-- AGRADECIMENTO -->
+    <section class="screen" data-step="7" hidden aria-labelledby="thanks-title">
+      <h2 class="question" id="thanks-title" tabindex="-1"></h2>
+      <p class="thanks__text" id="thanks-text"></p>
+      <!-- Agenda do Cal.com: só é carregada para leads qualificados (ver initCal no script.js) -->
+      <div class="cal" id="my-cal-inline-reuniao-de-diagnostico" hidden></div>    </section>
+
+  </main>
+
+  <noscript>
+    <p class="container noscript">Ative o JavaScript no seu navegador para preencher o formulário.</p>
+  </noscript>
+
+  <script src="script.js"></script>
+</body>
+</html>
