@@ -19,7 +19,7 @@ const WEBHOOK_AS_TEXT_PLAIN = false;
   const AUTO_ADVANCE_MS = 300;
   const REQUEST_TIMEOUT_MS = 15000;
   const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-  const CAPI_ENDPOINT ="/api/capi";                       // rota do Worker (src/capi.js)
+  const CAPI_ENDPOINT ="/api/capi";                       // Pages Function (functions/api/capi.js)
   const CAL_LINK ="nicolas2024/reuniao-de-diagnostico";   // usuário/tipo-de-evento no Cal.com
   const CAL_NAMESPACE = "reuniao-de-diagnostico";
   const CAL_ELEMENT_ID = "my-cal-inline-reuniao-de-diagnostico";
@@ -81,7 +81,7 @@ const WEBHOOK_AS_TEXT_PLAIN = false;
     return fbclid ? "fb.1." + Date.now() + "." + fbclid : "";
   }
 
-  // Envia o evento ao nosso servidor, que guarda o token e repassa à Meta (src/capi.js).
+  // Envia o evento ao nosso servidor, que guarda o token e repassa à Meta (functions/api/capi.js).
   // Nome, WhatsApp e cidade seguem em texto só até o servidor, que normaliza e aplica o hash.
   function sendCapi(eventName, eventId, customData) {
     const a = state.answers;

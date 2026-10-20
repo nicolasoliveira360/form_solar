@@ -7,9 +7,8 @@ public/index.html   estrutura e textos de todas as telas
 public/style.css    identidade visual (cores, Lato, layout responsivo)
 public/script.js    lógica: etapas, validação, envio, localStorage, UTMs, funil
 public/assets/      logo.png (você adiciona) + logo-placeholder.svg
-src/worker.js       Worker da Cloudflare: serve o site e a rota POST /api/capi
-src/capi.js         API de Conversões da Meta (guarda o token, aplica hash)
-wrangler.jsonc      configuração do Worker (nome, pasta pública, ID do pixel)
+functions/api/capi.js   Cloudflare Pages Function: POST /api/capi (API de Conversões da Meta,
+                        guarda o token e aplica o hash)
 ```
 
 ## Como rodar
@@ -24,9 +23,9 @@ npx serve -l 8080
 
 Abrir o `index.html` direto (`file://`) também funciona, mas alguns navegadores o tratam de forma restrita.
 
-**Site + API de Conversões, como em produção:** crie um arquivo `.dev.vars` na raiz (ele não vai para o Git) com `META_ACCESS_TOKEN=...` e, se quiser, `META_TEST_EVENT_CODE=...`, e rode `npx wrangler dev`.
+**Site + API de Conversões, como em produção:** crie um arquivo `.dev.vars` na raiz (ele não vai para o Git) com `META_ACCESS_TOKEN=...` e, se quiser, `META_TEST_EVENT_CODE=...`, e rode `npx wrangler pages dev public`.
 
-**Publicar:** o projeto é um Worker da Cloudflare com arquivos estáticos. Cada push na `main` publica sozinho (ver "API de Conversões" abaixo). Para publicar à mão: `npx wrangler deploy`.
+**Publicar:** o projeto é um **Cloudflare Pages** conectado ao Git. Cada push na `main` publica sozinho (ver "API de Conversões" abaixo). Para publicar à mão: `npx wrangler pages deploy public --project-name NOME`.
 
 Para testar UTMs: `http://localhost:8080/?utm_source=facebook&utm_medium=cpc&utm_campaign=teste`
 
@@ -89,13 +88,13 @@ Para validar, use a extensão Meta Pixel Helper ou a aba Teste de eventos do Ger
 
 ### API de Conversões (servidor)
 
-Cada evento da tabela (menos o `PageView`) é enviado **duas vezes com o mesmo `event_id`**: pelo pixel, no navegador, e por `src/capi.js`, no servidor. A Meta deduplica e conta uma vez só. O servidor acrescenta IP, user agent, `fbp`/`fbc` e os dados do lead (`em`, `ph`, `fn`, `ln`, `ct`, `st`, `country`, `external_id`), normalizados e com hash SHA-256.
+Cada evento da tabela (menos o `PageView`) é enviado **duas vezes com o mesmo `event_id`**: pelo pixel, no navegador, e por `functions/api/capi.js`, no servidor. A Meta deduplica e conta uma vez só. O servidor acrescenta IP, user agent, `fbp`/`fbc` e os dados do lead (`em`, `ph`, `fn`, `ln`, `ct`, `st`, `country`, `external_id`), normalizados e com hash SHA-256.
 
 O **token de acesso fica só no servidor**. Nunca coloque no `script.js` ou no `index.html`.
 
-Publicação como **Worker da Cloudflare** conectado ao Git (*Workers & Pages > Create > Import a repository*). O `name` do `wrangler.jsonc` precisa ser igual ao nome do Worker no painel, e o comando de deploy é `npx wrangler deploy`:
+Publicação no **Cloudflare Pages** conectado ao Git. Na criação do projeto: Framework preset **None**, Build command vazio e **Build output directory `public`**. A pasta `functions/` na raiz do repositório é publicada automaticamente (o upload por arrastar e soltar ignora as funções):
 
-1. O `META_PIXEL_ID` já está no `wrangler.jsonc`. Em *Settings > Variables and Secrets* do Worker, crie `META_ACCESS_TOKEN` (como **Secret**). Opcionais: `ALLOWED_ORIGIN` (ex.: `https://seusite.com`) e `META_TEST_EVENT_CODE`. O `keep_vars` mantém essas variáveis a cada deploy.
+1. Em *Settings > Variables and Secrets* do projeto, crie `META_PIXEL_ID` e `META_ACCESS_TOKEN` (como segredo). Opcionais: `ALLOWED_ORIGIN` (ex.: `https://seusite.com`) e `META_TEST_EVENT_CODE`. As variáveis só valem em deploys novos.
 2. O token é gerado em Gerenciador de Eventos > pixel > Configurações > API de Conversões > *Gerar token de acesso*.
 3. Para testar, preencha `META_TEST_EVENT_CODE` com o código da aba *Teste de eventos*; os eventos do servidor aparecem lá como "Servidor". **Remova a variável antes de rodar a campanha.**
 4. Se o front-end e a função estiverem em domínios diferentes, troque `CAPI_ENDPOINT` no topo do `script.js` pela URL completa.
