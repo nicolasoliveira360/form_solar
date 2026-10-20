@@ -37,11 +37,20 @@ Salve a logo em `assets/logo.png`. Ela é exibida com 40px de altura, no topo, �
 
 | Constante | O que faz |
 |---|---|
-| `WEBHOOK_URL` | URL que recebe o POST com os dados. Substitua `"COLE_AQUI"`. |
+| `WEBHOOK_URL` | Para onde o formulário envia o lead. Hoje é `"/api/lead"` (função do Cloudflare que repassa ao Twenty CRM, ver abaixo). Com `"COLE_AQUI"` o envio é simulado. |
 | `CAL_LINK` / `CAL_NAMESPACE` / `CAL_ELEMENT_ID` | Agenda do Cal.com exibida (incorporação inline) para leads **qualificados** depois do envio. Nome e resumo do lead já vão preenchidos. Leads não qualificados não veem a agenda. |
 | `WEBHOOK_AS_TEXT_PLAIN` | Mude para `true` se o seu webhook der erro de CORS (ex.: Zapier). O corpo segue sendo JSON. |
 
-> Enquanto `WEBHOOK_URL` for `"COLE_AQUI"`, o envio é **simulado** (o payload aparece no console do navegador) para você testar o fluxo. Configure a URL antes de publicar.
+> Enquanto `WEBHOOK_URL` for `"COLE_AQUI"`, o envio é **simulado** (o payload aparece no console do navegador) para você testar o fluxo.
+
+## Twenty CRM
+
+O lead segue este caminho: formulário → `POST /api/lead` (`functions/api/lead.js`) → webhook do workflow **"Novo lead do formulário (site)"** no Twenty, que cria **Empresa**, **Pessoa** (e-mail, WhatsApp, ligada à empresa) e **Oportunidade** (ligada às duas).
+
+- A URL do webhook do Twenty fica só no servidor: crie a variável **`TWENTY_WEBHOOK_URL`** (como Secret) no Cloudflare Pages. A URL aparece no gatilho do workflow, no editor do Twenty. Sem ela, `/api/lead` responde 500 e o lead vê "Ops, algo deu errado". Depois de criar a variável, faça um novo deploy.
+- Lead qualificado entra na etapa **Screening**; os demais, em **New**.
+- Campos criados na Oportunidade: Cidade/UF, Instalações por mês, Origem dos clientes, Investimento mensal em marketing, Lead qualificado, UTM source/medium/campaign/content/term e URL da página.
+- Para rodar tudo local, ponha `TWENTY_WEBHOOK_URL=...` no `.dev.vars` e use `npx wrangler pages dev public`.
 
 ## Webhook: o que é enviado
 

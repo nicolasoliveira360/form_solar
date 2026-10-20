@@ -1,7 +1,7 @@
 /* ==========================================================
    CONFIGURAÇÃO — edite aqui
    ========================================================== */
-const WEBHOOK_URL = "COLE_AQUI";             // URL que recebe o POST (JSON) com o lead
+const WEBHOOK_URL = "/api/lead";             // rota que recebe o POST (JSON) e repassa o lead ao Twenty CRM
 
 // Use true se o seu webhook bloquear o envio por CORS (ex.: Zapier). O corpo continua
 // sendo JSON, mas é enviado como text/plain, o que dispensa a checagem "preflight".
