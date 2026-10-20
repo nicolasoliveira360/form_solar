@@ -39,6 +39,8 @@ export async function onRequestPost({ request, env }) {
     lead[key] = String(body[key] == null ? "" : body[key]).trim().slice(0, MAX_FIELD_LENGTH);
   });
 
+  lead.email = lead.email.toLowerCase();   // o Cal.com procura a oportunidade por este e-mail
+
   if (!lead.nome || !lead.email || !lead.empresa) {
     return json({ ok: false, error: "campos obrigatórios ausentes" }, 400);
   }

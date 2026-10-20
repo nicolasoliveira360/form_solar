@@ -52,6 +52,14 @@ O lead segue este caminho: formulário → `POST /api/lead` (`functions/api/lead
 - Campos criados na Oportunidade: Cidade/UF, Instalações por mês, Origem dos clientes, Investimento mensal em marketing, Lead qualificado, UTM source/medium/campaign/content/term e URL da página.
 - Para rodar tudo local, ponha `TWENTY_WEBHOOK_URL=...` no `.dev.vars` e use `npx wrangler pages dev public`.
 
+### Reunião marcada no Cal.com -> Twenty
+
+Quando o lead marca (ou remarca) a reunião, o Cal.com chama `POST /api/cal-booking` (`functions/api/cal-booking.js`), que confere a assinatura e aciona o workflow **"Reunião agendada no Cal.com"** do Twenty. Ele acha a oportunidade pelo **e-mail do lead**, move para a etapa **Meeting** e grava a data em "Reunião agendada para".
+
+1. Variáveis no Cloudflare Pages (Secrets): `CAL_WEBHOOK_SECRET` (um texto aleatório que você inventa) e `TWENTY_CAL_WEBHOOK_URL` (URL do webhook do workflow do Cal.com, no gatilho dele no Twenty). Depois, novo deploy.
+2. No Cal.com: *Settings > Developer > Webhooks > New*. Subscriber URL `https://SEU-DOMINIO/api/cal-booking`, eventos **Booking Created** e **Booking Rescheduled**, e o mesmo texto no campo **Secret**. O botão *Ping test* do Cal.com deve responder 200.
+3. Limitação: a busca é pelo e-mail. Se o lead trocar o e-mail na página do Cal.com, a oportunidade não é encontrada e a execução aparece como falha no Twenty. O formulário já envia o e-mail preenchido para evitar isso. Cancelamentos não alteram a oportunidade.
+
 ## Webhook: o que é enviado
 
 `POST` com `Content-Type: application/json`:
