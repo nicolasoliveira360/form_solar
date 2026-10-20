@@ -1,9 +1,9 @@
 /* ==========================================================
-   API de Conversões da Meta — Cloudflare Pages Function
+   API de Conversões da Meta — chamada por src/worker.js
    Rota: POST /api/capi
 
-   Variáveis de ambiente (Cloudflare Pages > Settings > Variables and Secrets):
-     META_PIXEL_ID          ID do pixel (não é segredo)
+   Variáveis (Cloudflare > Workers > projeto > Settings > Variables and Secrets):
+     META_PIXEL_ID          ID do pixel (já definido no wrangler.jsonc)
      META_ACCESS_TOKEN      token da API de Conversões (SEGREDO — nunca no front-end)
      ALLOWED_ORIGIN         (opcional) ex.: https://seusite.com — recusa chamadas de outros domínios
      META_TEST_EVENT_CODE   (opcional) código da aba "Teste de eventos"; remova ao publicar
@@ -13,7 +13,7 @@ const GRAPH_VERSION = "v23.0";
 const ALLOWED_EVENTS = ["Lead", "LeadQualificado", "ViewContent", "Schedule"];
 const MAX_BODY_BYTES = 8 * 1024;
 
-export async function onRequestPost({ request, env }) {
+export async function handleCapi(request, env) {
   if (!env.META_PIXEL_ID || !env.META_ACCESS_TOKEN) {
     return json({ ok: false, error: "CAPI não configurada" }, 500);
   }

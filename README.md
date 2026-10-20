@@ -3,17 +3,18 @@
 Site-formulário multi-etapas (capa + 6 perguntas + agradecimento) em HTML, CSS e JavaScript puro. Sem frameworks e sem build.
 
 ```
-index.html   estrutura e textos de todas as telas
-style.css    identidade visual (cores, Lato, layout responsivo)
-script.js    lógica: etapas, validação, envio, localStorage, UTMs
-assets/      logo.png (você adiciona) + logo-placeholder.svg
+public/index.html   estrutura e textos de todas as telas
+public/style.css    identidade visual (cores, Lato, layout responsivo)
+public/script.js    lógica: etapas, validação, envio, localStorage, UTMs, funil
+public/assets/      logo.png (você adiciona) + logo-placeholder.svg
+src/worker.js       Worker da Cloudflare: serve o site e a rota POST /api/capi
+src/capi.js         API de Conversões da Meta (guarda o token, aplica hash)
+wrangler.jsonc      configuração do Worker (nome, pasta pública, ID do pixel)
 ```
 
 ## Como rodar
 
-**Opção 1 — abrir direto:** dê dois cliques em `index.html`. Funciona, mas alguns navegadores tratam `file://` de forma restrita.
-
-**Opção 2 — servidor local (recomendado):** na pasta do projeto, rode um destes comandos e abra `http://localhost:8080`:
+**Só o site (sem a API de Conversões):** na pasta `public/`, rode um destes comandos e abra `http://localhost:8080`:
 
 ```bash
 python -m http.server 8080
@@ -21,7 +22,11 @@ python -m http.server 8080
 npx serve -l 8080
 ```
 
-**Publicar:** envie a pasta inteira para qualquer hospedagem estática (Netlify, Vercel, Cloudflare Pages, GitHub Pages, etc.).
+Abrir o `index.html` direto (`file://`) também funciona, mas alguns navegadores o tratam de forma restrita.
+
+**Site + API de Conversões, como em produção:** crie um arquivo `.dev.vars` na raiz (ele não vai para o Git) com `META_ACCESS_TOKEN=...` e, se quiser, `META_TEST_EVENT_CODE=...`, e rode `npx wrangler dev`.
+
+**Publicar:** o projeto é um Worker da Cloudflare com arquivos estáticos. Cada push na `main` publica sozinho (ver "API de Conversões" abaixo). Para publicar à mão: `npx wrangler deploy`.
 
 Para testar UTMs: `http://localhost:8080/?utm_source=facebook&utm_medium=cpc&utm_campaign=teste`
 
@@ -84,13 +89,13 @@ Para validar, use a extensão Meta Pixel Helper ou a aba Teste de eventos do Ger
 
 ### API de Conversões (servidor)
 
-Cada evento da tabela (menos o `PageView`) é enviado **duas vezes com o mesmo `event_id`**: pelo pixel, no navegador, e por `functions/api/capi.js`, no servidor. A Meta deduplica e conta uma vez só. O servidor acrescenta IP, user agent, `fbp`/`fbc` e os dados do lead (`em`, `ph`, `fn`, `ln`, `ct`, `st`, `country`, `external_id`), normalizados e com hash SHA-256.
+Cada evento da tabela (menos o `PageView`) é enviado **duas vezes com o mesmo `event_id`**: pelo pixel, no navegador, e por `src/capi.js`, no servidor. A Meta deduplica e conta uma vez só. O servidor acrescenta IP, user agent, `fbp`/`fbc` e os dados do lead (`em`, `ph`, `fn`, `ln`, `ct`, `st`, `country`, `external_id`), normalizados e com hash SHA-256.
 
 O **token de acesso fica só no servidor**. Nunca coloque no `script.js` ou no `index.html`.
 
-Publicação no **Cloudflare Pages** (a pasta `functions/` só é publicada via Git ou `npx wrangler pages deploy .`; o upload por arrastar e soltar ignora as funções):
+Publicação como **Worker da Cloudflare** conectado ao Git (*Workers & Pages > Create > Import a repository*). O `name` do `wrangler.jsonc` precisa ser igual ao nome do Worker no painel, e o comando de deploy é `npx wrangler deploy`:
 
-1. Em *Settings > Variables and Secrets* do projeto, crie `META_PIXEL_ID` e `META_ACCESS_TOKEN` (como segredo). Opcionais: `ALLOWED_ORIGIN` (ex.: `https://seusite.com`) e `META_TEST_EVENT_CODE`.
+1. O `META_PIXEL_ID` já está no `wrangler.jsonc`. Em *Settings > Variables and Secrets* do Worker, crie `META_ACCESS_TOKEN` (como **Secret**). Opcionais: `ALLOWED_ORIGIN` (ex.: `https://seusite.com`) e `META_TEST_EVENT_CODE`. O `keep_vars` mantém essas variáveis a cada deploy.
 2. O token é gerado em Gerenciador de Eventos > pixel > Configurações > API de Conversões > *Gerar token de acesso*.
 3. Para testar, preencha `META_TEST_EVENT_CODE` com o código da aba *Teste de eventos*; os eventos do servidor aparecem lá como "Servidor". **Remova a variável antes de rodar a campanha.**
 4. Se o front-end e a função estiverem em domínios diferentes, troque `CAPI_ENDPOINT` no topo do `script.js` pela URL completa.
