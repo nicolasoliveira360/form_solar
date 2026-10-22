@@ -2,9 +2,10 @@
    Reunião marcada no Cal.com -> Twenty CRM — Cloudflare Pages Function
    Rota: POST /api/cal-booking
 
-   O Cal.com chama esta rota (webhook) quando uma reunião é criada ou remarcada. A rota
-   confere a assinatura do Cal.com e repassa os dados ao workflow "Reunião agendada no
-   Cal.com" do Twenty, que move a oportunidade para "Meeting" e grava a data.
+   O Cal.com chama esta rota (webhook) quando uma reunião é criada, remarcada ou cancelada.
+   A rota confere a assinatura do Cal.com e repassa os dados ao workflow "Reunião agendada
+   no Cal.com" do Twenty: criada/remarcada move a oportunidade para "Meeting" e grava a data;
+   cancelada devolve a oportunidade para "Screening" e marca o comparecimento como "Cancelou".
 
    Variáveis (Cloudflare Pages > projeto > Settings > Variables and Secrets):
      CAL_WEBHOOK_SECRET        o mesmo "Secret" configurado no webhook do Cal.com (SEGREDO)
@@ -12,7 +13,7 @@
    ========================================================== */
 
 const MAX_BODY_BYTES = 64 * 1024;
-const FORWARDED_EVENTS = ["BOOKING_CREATED", "BOOKING_RESCHEDULED"];
+const FORWARDED_EVENTS = ["BOOKING_CREATED", "BOOKING_RESCHEDULED", "BOOKING_CANCELLED"];
 
 export async function onRequestPost({ request, env }) {
   if (!env.CAL_WEBHOOK_SECRET || !env.TWENTY_CAL_WEBHOOK_URL) {
